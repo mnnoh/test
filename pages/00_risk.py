@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 import matplotlib.pyplot as plt
 
 # Load data
@@ -20,32 +21,25 @@ categories = data.columns[2:]
 # Streamlit layout
 st.title("Risk Perception Analysis")
 
-# Step 1: Show overall risk perception as a bar chart with colors
+# Step 1: Show overall risk perception as an interactive bar chart with Plotly
 st.header("Overall Risk Perception Across All Categories")
 
 # Calculate the mean score for each category
 category_means = data[categories].mean()
 
-# Define colors for each risk category
-colors = [
-    '#1f77b4',  # NaturalDisasters
-    '#ff7f0e',  # CollapseExplosion
-    '#2ca02c',  # TrafficAccidents
-    '#d62728',  # Fire
-    '#9467bd',  # FoodSafety
-    '#8c564b',  # FoodSecurity
-    '#e377c2',  # InfoSecurity
-    '#7f7f7f',  # NewDiseases
-    '#bcbd22',  # Crime
-    '#17becf',  # NuclearRadiation
-]
+# Create a Plotly bar chart
+fig = px.bar(
+    x=categories, 
+    y=category_means, 
+    labels={'x': 'Risk Category', 'y': 'Average Safety Perception Score (1 = Not Safe, 5 = Very Safe)'},
+    title="Overall Risk Perception for All Categories",
+    color=categories, 
+    color_discrete_sequence=px.colors.qualitative.Bold
+)
+fig.update_layout(yaxis=dict(range=[0, 5]))  # Set y-axis limit to 5
 
-fig, ax = plt.subplots(figsize=(12, 8))
-ax.bar(categories, category_means, color=colors, edgecolor='black')
-ax.set_title("Overall Risk Perception for All Categories")
-ax.set_ylabel("Average Safety Perception Score (1 = Not Safe, 5 = Very Safe)")
-ax.set_xticklabels(categories, rotation=45, ha='right')  # Rotate labels for readability
-st.pyplot(fig)
+# Display Plotly chart
+st.plotly_chart(fig)
 
 # Step 2: Select individual risk category for gender-specific box plot
 st.header("Gender Comparison for Selected Risk Category")
