@@ -19,24 +19,23 @@ categories = data.columns[2:]
 
 # Streamlit layout
 st.title("Risk Perception by Gender")
-st.write("Distribution of risk perception scores by gender for various safety areas.")
+st.write("Box plots of risk perception scores by gender for various safety areas.")
 
-# Gender selection
-gender = st.selectbox("Select Gender", options=['Male', 'Female'])
+# Plot boxplots for each category by gender
+fig, axes = plt.subplots(nrows=4, ncols=3, figsize=(15, 15))
+axes = axes.flatten()
 
-# Filter data by selected gender
-gender_data = data[data['Gender'] == gender]
+for i, category in enumerate(categories):
+    ax = axes[i]
+    ax.boxplot([data[data['Gender'] == 'Male'][category].dropna(),
+                data[data['Gender'] == 'Female'][category].dropna()],
+               labels=['Male', 'Female'])
+    ax.set_title(f"{category} Risk Perception")
+    ax.set_ylabel("Safety Perception Score (1 = Not Safe, 5 = Very Safe)")
 
-# Plot distribution for each category
-for category in categories:
-    st.subheader(f"{category} Risk Perception")
-    fig, ax = plt.subplots()
-    ax.hist(gender_data[category], bins=5, edgecolor='black')
-    ax.set_xlabel("Safety Perception Score (1 = Not Safe, 5 = Very Safe)")
-    ax.set_ylabel("Frequency")
-    ax.set_title(f"{category} Perception for {gender}")
-    st.pyplot(fig)
+# Hide any unused subplots if categories < 12
+for j in range(len(categories), len(axes)):
+    fig.delaxes(axes[j])
 
-    ax.set_ylabel("Frequency")
-    ax.set_title(f"{category} Perception for {gender}")
-    st.pyplot(fig)
+plt.tight_layout()
+st.pyplot(fig)
