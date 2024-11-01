@@ -18,24 +18,26 @@ data['Gender'] = data['Gender'].map({1: 'Male', 2: 'Female'})
 categories = data.columns[2:]
 
 # Streamlit layout
-st.title("Risk Perception by Gender")
-st.write("Box plots of risk perception scores by gender for various safety areas.")
+st.title("Risk Perception Analysis")
 
-# Plot boxplots for each category by gender
-fig, axes = plt.subplots(nrows=4, ncols=3, figsize=(15, 15))
-axes = axes.flatten()
+# Step 1: Show overall box plot for all risk categories combined
+st.header("Overall Risk Perception by Gender")
+fig, ax = plt.subplots(figsize=(12, 8))
+data_melted = pd.melt(data, id_vars=['Gender'], value_vars=categories, var_name='RiskCategory', value_name='Score')
+data_melted.boxplot(column='Score', by=['Gender', 'RiskCategory'], ax=ax, grid=False)
+ax.set_title("Overall Risk Perception Across All Categories")
+ax.set_ylabel("Safety Perception Score (1 = Not Safe, 5 = Very Safe)")
+plt.suptitle("")  # Remove automatic title
+st.pyplot(fig)
 
-for i, category in enumerate(categories):
-    ax = axes[i]
-    ax.boxplot([data[data['Gender'] == 'Male'][category].dropna(),
-                data[data['Gender'] == 'Female'][category].dropna()],
-               labels=['Male', 'Female'])
-    ax.set_title(f"{category} Risk Perception")
-    ax.set_ylabel("Safety Perception Score (1 = Not Safe, 5 = Very Safe)")
+# Step 2: Select individual risk category for gender-specific box plot
+st.header("Gender Comparison for Selected Risk Category")
+selected_category = st.selectbox("Select a Risk Category", options=categories)
 
-# Hide any unused subplots if categories < 12
-for j in range(len(categories), len(axes)):
-    fig.delaxes(axes[j])
-
-plt.tight_layout()
+fig, ax = plt.subplots(figsize=(8, 6))
+ax.boxplot([data[data['Gender'] == 'Male'][selected_category].dropna(),
+            data[data['Gender'] == 'Female'][selected_category].dropna()],
+           labels=['Male', 'Female'])
+ax.set_title(f"{selected_category} Risk Perception by Gender")
+ax.set_ylabel("Safety Perception Score (1 = Not Safe, 5 = Very Safe)")
 st.pyplot(fig)
