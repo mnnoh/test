@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 # Load data
 file_path = 'test.csv'
@@ -32,8 +31,12 @@ gender_data = data[data['Gender'] == gender]
 for category in categories:
     st.subheader(f"{category} Risk Perception")
     fig, ax = plt.subplots()
-    sns.histplot(gender_data[category], bins=5, kde=True, ax=ax)
+    ax.hist(gender_data[category], bins=5, edgecolor='black')
     ax.set_xlabel("Safety Perception Score (1 = Not Safe, 5 = Very Safe)")
+    ax.set_ylabel("Frequency")
+    ax.set_title(f"{category} Perception for {gender}")
+    st.pyplot(fig)
+
     ax.set_ylabel("Frequency")
     ax.set_title(f"{category} Perception for {gender}")
     st.pyplot(fig)
