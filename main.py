@@ -1,7 +1,59 @@
 import streamlit as st
-st.title('나의 첫 스트림릿 웹앱')
-name = st.text_input('이름을 입력해주세요 : ')
-mbti = st.selectbox('MBTI를 선택해주세요', ['ENTJ','INTP'])
 
-if st.button('확인!') and name and mbti : 
-  st.write(name+'님은 정말 '+mbti+' 같아보이시네요!')
+# 웹 앱 제목 및 소개
+st.title('🔮 나의 첫 스트림릿 웹앱')
+st.subheader('나의 MBTI 유형을 알아보세요!')
+st.markdown("이 앱을 통해 자신의 MBTI 유형을 선택하고, 간단한 성격 설명을 확인할 수 있습니다! 😊")
+
+# 사용자 입력
+name = st.text_input('이름을 입력해주세요:')
+mbti = st.selectbox('MBTI를 선택해주세요', [
+    'ENTJ', 'INTP', 'ENFP', 'INFJ', 'ESTJ', 'ISTJ', 'ESFP', 'ISFP',
+    'ENTP', 'INTJ', 'ENFJ', 'INFP', 'ESTP', 'ISTP', 'ESFJ', 'ISFJ'
+])
+
+# 각 MBTI 설명 데이터
+mbti_descriptions = {
+    'ENTJ': "리더십이 강하고 목표 지향적인 유형! 🦁 추진력과 결단력이 돋보이는 스타일이에요. 주변 사람들에게 큰 영향을 주며, 계획적이고 효율적이에요!",
+    'INTP': "논리적이고 창의력이 넘치는 유형! 🧠 분석적인 사고와 독립성을 중시하며, 새로운 아이디어를 탐구하는 걸 좋아해요.",
+    'ENFP': "창의적이고 열정적인 유형! 🎨 인간관계에서 따뜻하고 사교적인 면모를 보이며, 다양한 가능성을 탐구하는 걸 즐겨요.",
+    'INFJ': "이상주의적이며 통찰력이 뛰어난 유형! 🌌 사람들을 깊이 이해하고, 도전적인 문제에 진심을 다하는 편이에요.",
+    'ESTJ': "현실적이고 체계적인 유형! 🛠 조직적이고 책임감이 강하며, 효율적으로 일을 수행하는 걸 선호해요.",
+    'ISTJ': "신뢰할 수 있는 현실주의자! 📜 꼼꼼하고 철저하게 계획을 세워 실수 없이 일을 수행하는 걸 중시해요.",
+    'ESFP': "사교적이고 활기찬 유형! 🎉 주변 사람들과의 순간을 즐기며, 유쾌하고 따뜻한 성격을 지녔어요.",
+    'ISFP': "예술적이고 감성적인 유형! 🎨 감수성이 풍부하고 조화로움을 중시하며, 자신의 가치에 충실해요.",
+    'ENTP': "창의적이고 독창적인 유형! 🌟 논리적인 사고와 호기심으로 새로운 시도를 두려워하지 않아요.",
+    'INTJ': "전략적이고 독립적인 유형! 🧭 분석적이며, 장기적인 목표를 세우고 달성하는 걸 좋아해요.",
+    'ENFJ': "타인을 배려하고 리더십이 있는 유형! 💖 사람들을 돕고 조화를 이루는 데 능숙해요.",
+    'INFP': "이상주의적이고 감수성이 풍부한 유형! 🌱 자신의 가치와 감정에 따라 진심으로 행동해요.",
+    'ESTP': "열정적이고 에너지 넘치는 유형! 🚀 실용적이고 도전적인 상황에서 빛을 발해요.",
+    'ISTP': "문제 해결에 강한 유형! 🛠 현실적이며, 독립적으로 문제를 해결하는 걸 선호해요.",
+    'ESFJ': "사람들과의 조화를 중시하는 유형! 🤗 타인을 배려하고, 친절하게 사람들을 이끌어요.",
+    'ISFJ': "헌신적이고 세심한 유형! 🌸 주변 사람들을 배려하며, 안정감을 주는 존재예요."
+}
+
+# 확인 버튼 클릭 시 결과 표시
+if st.button('확인!') and name and mbti:
+    st.success(f"🎉 {name}님은 정말 {mbti} 같아보이시네요!")
+    st.info(f"**{mbti}** 유형: {mbti_descriptions[mbti]}")
+
+# 재미 요소 추가: 매번 랜덤 응원의 메시지 표시
+import random
+encouragements = [
+    "오늘도 빛나는 하루 되세요! 💫",
+    "당신은 특별한 존재입니다! 🌟",
+    "화이팅! 💪 오늘도 멋진 하루!",
+    "세상에 하나뿐인 당신, 너무 멋져요! 😎"
+]
+if name and mbti:
+    st.sidebar.write(random.choice(encouragements))
+    st.sidebar.write("✨ 나를 더 사랑하기 🥰")
+
+# 분위기 있는 Progress Bar 추가
+import time
+
+st.write("**MBTI 결과 생성 중...**")
+progress_bar = st.progress(0)
+for i in range(100):
+    time.sleep(0.01)
+    progress_bar.progress(i + 1)
