@@ -20,12 +20,30 @@ categories = data.columns[2:]
 # Streamlit layout
 st.title("Risk Perception Analysis")
 
-# Step 1: Show overall box plot for all risk categories combined (without gender distinction)
+# Step 1: Show overall risk perception as a bar chart with colors
 st.header("Overall Risk Perception Across All Categories")
+
+# Calculate the mean score for each category
+category_means = data[categories].mean()
+
+# Define colors for each risk category
+colors = [
+    '#1f77b4',  # NaturalDisasters
+    '#ff7f0e',  # CollapseExplosion
+    '#2ca02c',  # TrafficAccidents
+    '#d62728',  # Fire
+    '#9467bd',  # FoodSafety
+    '#8c564b',  # FoodSecurity
+    '#e377c2',  # InfoSecurity
+    '#7f7f7f',  # NewDiseases
+    '#bcbd22',  # Crime
+    '#17becf',  # NuclearRadiation
+]
+
 fig, ax = plt.subplots(figsize=(12, 8))
-data[categories].boxplot(ax=ax)
+ax.bar(categories, category_means, color=colors, edgecolor='black')
 ax.set_title("Overall Risk Perception for All Categories")
-ax.set_ylabel("Safety Perception Score (1 = Not Safe, 5 = Very Safe)")
+ax.set_ylabel("Average Safety Perception Score (1 = Not Safe, 5 = Very Safe)")
 ax.set_xticklabels(categories, rotation=45, ha='right')  # Rotate labels for readability
 st.pyplot(fig)
 
