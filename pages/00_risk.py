@@ -25,24 +25,18 @@ st.title("Risk Perception Analysis")
 st.header("Overall Risk Perception Across All Categories")
 
 # Calculate the mean score for each category
-category_means = data[categories].mean().round(2)  # Round to 2 decimal places for display
+category_means = data[categories].mean()
 
-# Create a Plotly bar chart with custom hover information
+# Create a Plotly bar chart
 fig = px.bar(
     x=categories, 
     y=category_means, 
     labels={'x': 'Risk Category', 'y': 'Average Safety Perception Score (1 = Not Safe, 5 = Very Safe)'},
     title="Overall Risk Perception for All Categories",
     color=categories, 
-    color_discrete_sequence=px.colors.qualitative.Bold,
-    hover_data={'y': True}  # Only show the y value (average) on hover
+    color_discrete_sequence=px.colors.qualitative.Bold
 )
-
-# Update hover template to show only the average value
-fig.update_traces(hovertemplate='Average Score: %{y}')
-
-# Set y-axis limit to 5
-fig.update_layout(yaxis=dict(range=[0, 5]))
+fig.update_layout(yaxis=dict(range=[0, 5]))  # Set y-axis limit to 5
 
 # Display Plotly chart
 st.plotly_chart(fig)
