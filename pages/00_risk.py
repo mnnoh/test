@@ -20,14 +20,13 @@ categories = data.columns[2:]
 # Streamlit layout
 st.title("Risk Perception Analysis")
 
-# Step 1: Show overall box plot for all risk categories combined
-st.header("Overall Risk Perception by Gender")
+# Step 1: Show overall box plot for all risk categories combined (without gender distinction)
+st.header("Overall Risk Perception Across All Categories")
 fig, ax = plt.subplots(figsize=(12, 8))
-data_melted = pd.melt(data, id_vars=['Gender'], value_vars=categories, var_name='RiskCategory', value_name='Score')
-data_melted.boxplot(column='Score', by=['Gender', 'RiskCategory'], ax=ax, grid=False)
-ax.set_title("Overall Risk Perception Across All Categories")
+data[categories].boxplot(ax=ax)
+ax.set_title("Overall Risk Perception for All Categories")
 ax.set_ylabel("Safety Perception Score (1 = Not Safe, 5 = Very Safe)")
-plt.suptitle("")  # Remove automatic title
+ax.set_xticklabels(categories, rotation=45, ha='right')  # Rotate labels for readability
 st.pyplot(fig)
 
 # Step 2: Select individual risk category for gender-specific box plot
